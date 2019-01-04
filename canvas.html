@@ -1,0 +1,68 @@
+<html>
+<head>
+<script type="text/javascript" src="/source/js/jquery-1.7.2.min.js"></script>
+</head>
+<body>
+	<img id="hst" src="/source/image/heishitong.jpg"/>
+	<div id="try" style="display:inline-block;position:relative;">
+		<img id="hst2" src="/source/image/heishitong.jpg"/>
+	</div>
+</body>
+
+<script type="text/javascript">
+var img = document.getElementById('hst');
+var w = 0;
+var h = 0;
+var data = [];
+img.onload = function(){
+	w = img.width;
+	h = img.height;
+	var cav = document.createElement('canvas');
+	cav.width = w;
+	cav.height = h;
+	cav.innerHTML = 'cav';
+	var ctxt = cav.getContext('2d');
+		ctxt.drawImage(img,0,0);
+	//document.body.appendChild(cav);
+		data = ctxt.getImageData(0, 0, w, h).data;//读取整张图片的像素。
+	
+	var div = document.createElement('div');
+		div.width = w;
+		div.height = h;
+		div.style.display='inline-block';
+		var index = (h / 2 * w  + w/2) * 4;
+		
+		console.log(w / 2+','+h / 2)
+		console.log(data[index],data[index+1],data[index+2]);
+		div.innerHTML = '<svg width="'+w+'" height="'+h+'"><circle cx="'+(w/2)+'" cy="'+(h/2)+'" r="'+(Math.min(w,h)/2)+'" fill="#'+data[index].toString(16)+data[index+1].toString(16)+data[index+2].toString(16)+'"/></svg>';
+		//document.createElement('svg');
+
+	document.body.replaceChild(div,img);
+}
+
+
+$('body').on('mouseover', 'circle', function(){
+	var cirs = '';
+	for(var x=-1; x<1; x++){
+		for(var y=-1; y<1; y++){
+			var cx = $(this).attr('cx') * 1 + $(this).attr('r') * (x + 0.5);
+			var cy = $(this).attr('cy') * 1 + $(this).attr('r') * (y + 0.5);
+			var cr = $(this).attr('r')/2;
+			var ci = (w * parseInt(cy) + parseInt(cx)) * 4;
+			console.log(cx +'_'+ cy);
+			console.log(data[ci]+'_'+data[ci+1]+'_'+data[ci+2]);
+			var cc = data[ci].toString(16)+data[ci+1].toString(16)+data[ci+2].toString(16);
+			if(cr < 1){
+				cirs += '<rect x="'+(cx-cr)+'" y="'+(cy-cr)+'" height="'+cr*2+'" width="'+cr*2+'" style="fill:#'+cc+'" />';
+			}else{
+				cirs += '<circle cx="'+cx+'" cy="'+cy+'" r="'+cr+'" fill="#'+cc+'"/>';
+			}
+		}
+	}
+	//console.log($(this).parent().html());
+	$(this).parent().html($(this).parent().html().replace(this.outerHTML, cirs));
+})
+	
+	
+</script>
+</html>
