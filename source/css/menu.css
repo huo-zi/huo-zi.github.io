@@ -1,0 +1,37 @@
+body{font-size:14px;}
+body,form,ul,dl,ol{margin:0;padding:0;}
+table{border-collapse:collapse;border-spacing:0;}
+img{border:0;}
+input[type=radio],input[type=checkbox]{vertical-align:text-top;height:13px;margin-top:0;}
+		
+.my_menu{width:800px;margin:0px auto;padding-top:3%;}
+.my_menu div.title{padding:5px 10px; font-size:16; font-weight:bold;color:#777; background-color:#EEE; border:1px solid #E0E0E0;border-top-left-radius:3px;border-top-right-radius:3px;}
+.my_menu div.title span{float:right;margin-right:5px;}
+.my_menu div.line{overflow:hidden;border:1px solid #C9D5E3;border-top:hidden;}
+
+.my_menu div.type{width:70px;margin:4px 0;padding:5px 18px;float:left;font-size:14;color:#555;font-weight:bold;border-right:1px solid #C9D5E3;}
+.my_menu div.menu{width:650px;float:left;padding-top:8px;}
+
+.my_menu div.menu ul{float:left;margin:2px 0;margin-left:12px;padding-bottom:7px;}
+.my_menu div.menu ul li{float:left;margin-left:2px;width:60px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;}
+.my_menu div.menu ul li a{font-size:14;color:#0360AF;text-decoration:none;}
+.my_menu div.menu ul li a:HOVER{text-decoration:underline;}
+.my_menu div.menu ul span,img{float:left;}
+
+.over{background:#CCCCCC;}
+
+.overflow{overflow:hidden}
+
+.shadow {margin:0;width: 100%;height: 100%;_height: 800px;background: #000;filter: Alpha(opacity = 60);-moz-opacity: .5;opacity: 0.5;position: fixed;_position: absolute;z-index: 15;}
+.f_box{width: 100%;position: fixed;_position:absolute;z-index:20;top: 240px;display: block;}
+
+.menuTab{font-size:12px;width:300px;text-align:left;}
+.menuTab th{text-align:left;padding:6px;background:#EEE;border-radius:3px 3px 0px 0px;}
+.menuTab td{border:1px solid #CCC;padding:2px 4px;background:#FAFAFA;}
+
+.btn{width:16px;height:16px;text-indent:-9999px;display:inline-block;cursor:pointer;background-repeat:no-repeat;}
+.btn_add{background:url('../image/ico/ico_2.png') -338px -49px;}
+.btn_mng{background:url('../image/ico/ico_2.png') -520px -26px;}
+.btn_edt{background:url('../image/ico/ico_2.png') -573px -5px;}
+.btn_del{background:url('../image/ico/ico_3.png') -150px -1px;}
+.btn_opt{background:url('../image/ico/ico_2.png') -209px -26px;}
