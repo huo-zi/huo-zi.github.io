@@ -1,0 +1,255 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>HTML5 拼图</title>
+<script type="text/javascript" src="/source/js/jquery-1.7.2.min.js"></script>
+</head>
+<style type="text/css">
+button#begin,#giveup,#reload,#type{
+	float:right;
+}
+
+#content{
+	width:345px;
+	height:345px;
+	border: 2px solid #aaa;
+	margin:0 auto;
+	padding: 5px;
+	position: relative;
+	cursor: default;
+}
+
+#header,#timer{
+	width:363px;
+	height:25px;
+	margin:0px auto;
+	margin-top:50px;
+}
+
+.over{background:#FF0000;filter:alpha(opacity=50);-moz-opacity:0.5;opacity: 0.6;}
+.overline{background:#FFF;filter:alpha(opacity=50);-moz-opacity:0.5;opacity: 0.8;}
+.out{}
+
+</style>
+<script type="text/javascript">
+//填充层
+function fillDiv(rows, cols, width, height, src){
+	var content = document.getElementById('content');
+		content.innerHTML = '';
+
+	var w = parseInt((width -rows*2)/rows);
+	var h = parseInt((height-cols*2)/cols);
+	var divs = [];
+	var dids = [];
+	for(var i = 0; i < rows*cols; i++){
+		var x,y;
+		x = -parseInt(i%rows)*(w+2);
+		y = -parseInt(i/rows)*(h+2);
+
+		var divPic = document.createElement('div');
+			divPic.className = 'divPic';
+			divPic.id = "div_"+i;
+			divPic.style.width = w+'px';
+			divPic.style.height = h+'px';
+			divPic.style.background = 'url('+src+') '+x+'px '+y+'px';
+			divPic.style.margin = '1px';
+			divPic.style.border = '0px solid #CCCCCC'; 
+			divPic.style.cursor = 'pointer';
+			divPic.style.float = 'left'; 
+			divPic.style.cssFloat = 'left';
+			divPic.style.overflow = 'hidden'; 
+			//divPic.innerText = divPic.id;
+			divPic.draggable = 'true';
+			divPic.onmouseover = function(){
+				var col,row;
+				for(var index = 0; index < rows*cols; index++){
+					if(content.childNodes[index].id == this.id){
+						col = parseInt(index%rows);
+						row = parseInt(index/cols);
+					}
+				}
+				for(var index = 0; index < rows*cols; index++){
+					if(parseInt(index%rows) == col || parseInt(index/rows) == row){
+						content.childNodes[index].className = 'overline';
+					}
+				}
+				this.className = 'over';
+			};
+
+			divPic.onmouseout  = function(){
+				this.className = '';
+				for(var index = 0; index < rows*cols; index++){
+					content.childNodes[index].className = '';
+				}
+			};
+			
+			divPic.ondragstart = function(){event.dataTransfer.setData("Text",event.target.id);}
+			divPic.ondragover  = function(){event.preventDefault();}
+			divPic.ondrop = function(event){
+				event.preventDefault();
+				var data = event.dataTransfer.getData("Text");
+				var bggd = this.style.background;
+				var Domd = document.getElementById(data);
+				this.style.background = Domd.style.background;
+				Domd.style.background = bggd;
+				Domd.id = this.id;
+				this.id = data;
+				checkSuccess(dids);
+			}
+		divs[i] = divPic;
+		dids[i] = divPic.id;
+	}
+
+	for(var j = 0; j < rows*cols; j++){
+		var index = parseInt(Math.random()*divs.length);
+		content.appendChild(divs[index]);
+		divs.splice(index,1);
+	}
+}
+
+//开始/刷新
+var timer;
+function begin(){
+	clearInterval(timer);
+	document.getElementById('header').style.display = 'none';
+	document.getElementById('timer' ).style.display = 'block';
+	document.getElementById('timeval').value = '00:00:00.0';
+	document.getElementById('timeval').alt = '0';
+	document.getElementById('giveup').innerText = '放弃';
+	var type = document.getElementById('type');
+	var imgs = document.getElementById('images');
+	fillDiv(type.value, type.value, imgs.width, imgs.height, imgs.src);
+	timer = setInterval("changTime()", 100);
+}
+
+//放弃拼图
+function giveup(){
+	clearInterval(timer);
+	document.getElementById('header').style.display = 'block';
+	document.getElementById('timer' ).style.display = 'none';
+	document.getElementById('timeval').value = '00:00:00.0';
+	document.getElementById('timeval').alt = '0';
+
+	var img = document.createElement('img');
+	img.src = document.getElementById('images').src;
+
+	var context = document.getElementById('content');
+	context.innerHTML = '';
+	context.appendChild(img);
+}
+
+//检索是否拼图完成
+function checkSuccess(oldIds){
+	var ids = document.getElementById('content').getElementsByTagName('div');
+	for(var k = 0; k < ids.length; k++){
+		if(oldIds[k] != ids[k].id){
+			return false;
+		}
+	}
+
+	clearInterval(timer);
+	alert('拼图成功,用时:'+document.getElementById('timeval').value);
+	document.getElementById('giveup').innerText = '重选';
+	var img	= document.createElement('img');
+	img.src = document.getElementById('images').src;
+	context = document.getElementById('content');
+	context.innerHTML = '';
+	context.appendChild(img);
+}
+
+//计时器
+function changTime(){
+	var timeval = document.getElementById('timeval');
+	var valtime = timeval.alt;
+		valtime = parseInt(valtime) + 1;
+	
+	var s,m,h;
+	h = parseInt(valtime/10/3600);
+	m = parseInt(valtime/10%3600/60);
+	s = parseInt(valtime/10%3600%60);
+	h = (h < 10) ? '0'+h : h;
+	m = (m < 10) ? '0'+m : m;
+	s = (s < 10) ? '0'+s : s;
+	timeval.value = (h+':'+m+':'+s+'.'+valtime%10);
+	timeval.alt	  = valtime;
+}
+
+//选择调用图片类型
+function choose(value){
+	if(value == '2'){
+		document.getElementById('imgUrl').style.display = 'inline';
+		document.getElementById('imgFile').style.display = 'none';
+	}else if(value == '3'){
+		document.getElementById('imgUrl').style.display = 'none';
+		document.getElementById('imgFile').style.display = 'inline';
+	}else{
+		document.getElementById('imgUrl').style.display = 'none';
+		document.getElementById('imgFile').style.display = 'none';
+		var img = document.getElementById('images');
+		img.src = "/source/image/images.png";
+		loadImg();
+	}
+}
+
+//检查文本框和输入框的值
+function checkVal(input){
+	if(input.value == ''){
+		return false;
+	}
+	if(input.value.indexOf('.jpg') < 0 && input.value.indexOf('.png') < 0){
+		input.value = '';
+		alert('此功能目前只支持png/jpg');
+		return false;
+	}
+	document.getElementById('images').src = input.value;
+	loadImg();
+}
+
+//加载图片，动态设置层的宽高
+function loadImg(){
+	var image = document.getElementById('images');
+	image.onload = function(){
+		var context = document.getElementById('content');
+			content.style.height = image.height+'px';
+			content.style.width = image.width+'px';
+		if(image.width > 344){
+			 document.getElementById('header').style.width = (image.width+18)+'px';
+			 document.getElementById('timer' ).style.width = (image.width+18)+'px';
+		}
+		var img	= document.createElement('img');
+		img.src = image.src;
+		context.innerHTML = '';
+		context.appendChild(img);
+	}
+}
+
+</script>
+
+<body>
+<h3 align="center">HTML5拼图</h3>
+<div id="header">
+	<select id="chosse" onchange="choose(this.value)">
+		<option value="1">预设</option>
+		<option value="2">地址</option>
+		<option value="3">上传</option>
+	</select>
+	<input id="imgUrl"  type="text" onblur="checkVal(this)" style="display:none;" />
+	<input id="imgFile" type="file" onchange="checkVal(this)" style="width:180px;display:none;" />
+	<button id="begin" onclick="begin()">开始</button>
+	<select id="type">
+		<option value="3">3 x 3</option>
+		<option value="4">4 x 4</option>
+		<option value="5">5 x 5</option>
+		<option value="6">6 x 6</option>
+	</select>
+</div>
+<div id="timer" style="display:none;">
+	<input value="00:00:00.0" id="timeval" readonly style="border:0" alt="0"/>
+	<button id="giveup" onclick="giveup()">放弃</button>
+	<button id="reload" onclick="begin()">重试</button>
+</div>
+<div id="content" alt="images.png"><img src="/source/image/images.png"/></div>
+<img id="images" src="/source/image/images.png" style="display:none;"/>
+</body>
+</html>
