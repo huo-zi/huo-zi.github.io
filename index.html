@@ -229,12 +229,12 @@ function loadImg(){
 <body>
 <h3 align="center">HTML5拼图</h3>
 <div id="header">
-	<select id="chosse" onchange="choose(this.value)">
+	<select id="chosse" onchange="choose(this.value)" style="display:none;">
 		<option value="1">预设</option>
 		<option value="2">地址</option>
 		<option value="3">上传</option>
 	</select>
-	<input id="imgUrl"  type="text" onblur="checkVal(this)" style="display:none;" />
+	<input id="imgUrl"  type="text" onblur="checkVal(this)"/>
 	<input id="imgFile" type="file" onchange="checkVal(this)" style="width:180px;display:none;" />
 	<button id="begin" onclick="begin()">开始</button>
 	<select id="type">
