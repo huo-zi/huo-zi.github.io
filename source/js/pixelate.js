@@ -51,7 +51,7 @@ Pixelate.prototype = {
 	},
 
 	loadPixelate: function(){
-		this.svg.childNodes.lenght = 1;
+		this.svg.innerHTML = '<image xlink:href="'+this.src+'" width="'+this.width+'" height="'+this.height+'" />';
 		for(var i = 0; i < this.tags.length; i++){
 			var tag = this.tags[i].split(',');
 			var rec = this.loadRect(tag[0] * this.rate, tag[1] * this.rate, this.size * this.rate, this.size * this.rate);
