@@ -58,8 +58,7 @@ button#begin,#giveup,#reload,#type{
 			timeval.value = (h+':'+m+':'+s+'.'+valtime%10);
 			timeval.title = valtime;
 		}, 100);
-	}
-	function begin(){
+
 		img = document.getElementById('images');
 		p = new Puzzle(img.id, img.width, img.height, img.src, img.className).loadPuzzle();
 	}
@@ -78,7 +77,7 @@ button#begin,#giveup,#reload,#type{
 <body>
 <h3 align="center">拼图</h3>
 <div id="header">
-	<input id="imgUrl"  type="text" onblur="checkVal(this.value)"/>
+	URL:<input id="imgUrl"  type="text" onblur="checkVal(this.value)" width=""/>
 	<button id="begin" onclick="begin()">开始</button>
 </div>
 <div id="timer" style="display:none;">
@@ -86,6 +85,7 @@ button#begin,#giveup,#reload,#type{
 	<button id="giveup" onclick="giveup()">放弃</button>
 	<button id="reload" onclick="begin()">重试</button>
 </div>
-<div id="content"><img id="images" src="/source/image/images.png"/></div>
+<div id="content"><img src="/source/image/images.png"/></div>
+<img id="images" src="/source/image/images.png"/>
 </body>
 </html>
