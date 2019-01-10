@@ -36,15 +36,16 @@ button#begin,#giveup,#reload,#type{
 	var p;
 	var img;
 	var timer;
+	var timeval;
 	
 	function begin(){
 		clearInterval(timer);
 		document.getElementById('header').style.display = 'none';
 		document.getElementById('timer' ).style.display = 'block';
 		
-		var timeval = document.getElementById('timeval');
-			timeval.value = '00:00:00.0';
-			timeval.title = 0;
+		timeval = document.getElementById('timeval');
+		timeval.value = '00:00:00.0';
+		timeval.title = 0;
 		timer = setInterval(function(){
 			var valtime = parseInt(timeval.title) + 1;
 			
@@ -60,11 +61,22 @@ button#begin,#giveup,#reload,#type{
 		}, 100);
 
 		img = document.getElementById('images');
-		p = new Puzzle(img.id, img.width, img.height, img.src, img.className).loadPuzzle();
+		p = new Puzzle(img.id, img.width, img.height, img.src, img.className);
+		p.loadPuzzle();
+		console.log(p);
+	}
+	
+	function reload(){
+		timeval.value = '00:00:00.0';
+		timeval.title = 0;
+		p.regain();
+		p.loadPuzzle();
 	}
 	
 	function giveup(){
 		clearInterval(timer);
+		document.getElementById('header').style.display = 'block';
+		document.getElementById('timer' ).style.display = 'none';
 		p.regain();
 	}
 	
@@ -77,15 +89,14 @@ button#begin,#giveup,#reload,#type{
 <body>
 <h3 align="center">拼图</h3>
 <div id="header">
-	URL:<input id="imgUrl"  type="text" onblur="checkVal(this.value)" width=""/>
+	URL:<input id="imgUrl"  type="text" onblur="checkVal(this.value)" style="width:280px"/>
 	<button id="begin" onclick="begin()">开始</button>
 </div>
 <div id="timer" style="display:none;">
-	<input value="00:00:00.0" id="timeval" readonly style="border:0" alt="0"/>
+	<input value="00:00:00.0" id="timeval" readonly/>
 	<button id="giveup" onclick="giveup()">放弃</button>
-	<button id="reload" onclick="begin()">重试</button>
+	<button id="reload" onclick="reload()">重试</button>
 </div>
-<div id="content"><img src="/source/image/images.png"/></div>
-<img id="images" src="/source/image/images.png"/>
+<div id="content"><img id="images" src="/source/image/images.png"/></div>
 </body>
 </html>
