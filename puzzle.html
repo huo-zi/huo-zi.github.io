@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>拼图</title>
+<script type="text/javascript" src="/source/js/jquery-1.7.2.min.js"></script>
+</head>
+<style type="text/css">
+button#begin,#giveup,#reload,#type{
+	float:right;
+}
+
+#content{
+	width:345px;
+	height:345px;
+	border: 2px solid #aaa;
+	margin:0 auto;
+	padding: 5px;
+	position: relative;
+	cursor: default;
+}
+
+#header,#timer{
+	width:363px;
+	height:25px;
+	margin:0px auto;
+	margin-top:50px;
+}
+
+.over{background:#FF0000;filter:alpha(opacity=50);-moz-opacity:0.5;opacity: 0.6;}
+.overline{background:#FFF;filter:alpha(opacity=50);-moz-opacity:0.5;opacity: 0.8;}
+.out{}
+
+</style>
+<script type="text/javascript">
+	var p;
+	var img;
+	var timer;
+	
+	function begin(){
+		clearInterval(timer);
+		document.getElementById('header').style.display = 'none';
+		document.getElementById('timer' ).style.display = 'block';
+		
+		var timeval = document.getElementById('timeval');
+			timeval.value = '00:00:00.0';
+			timeval.title = 0;
+		timer = setInterval(function(){
+			var valtime = parseInt(timeval.title) + 1;
+			
+			var s,m,h;
+			h = parseInt(valtime/10/3600);
+			m = parseInt(valtime/10%3600/60);
+			s = parseInt(valtime/10%3600%60);
+			h = (h < 10) ? '0'+h : h;
+			m = (m < 10) ? '0'+m : m;
+			s = (s < 10) ? '0'+s : s;
+			timeval.value = (h+':'+m+':'+s+'.'+valtime%10);
+			timeval.title = valtime;
+		}, 100);
+	}
+	function begin(){
+		img = document.getElementById('images');
+		p = new Puzzle(img.id, img.width, img.height, img.src, img.className).loadPuzzle();
+	}
+	
+	function giveup(){
+		clearInterval(timer);
+		p.regain();
+	}
+	
+	function checkVal(url){
+		img.src = url;
+		p.regain();
+	}
+</script>
+
+<body>
+<h3 align="center">拼图</h3>
+<div id="header">
+	<input id="imgUrl"  type="text" onblur="checkVal(this.value)"/>
+	<button id="begin" onclick="begin()">开始</button>
+</div>
+<div id="timer" style="display:none;">
+	<input value="00:00:00.0" id="timeval" readonly style="border:0" alt="0"/>
+	<button id="giveup" onclick="giveup()">放弃</button>
+	<button id="reload" onclick="begin()">重试</button>
+</div>
+<div id="content"><img id="images" src="/source/image/images.png"/></div>
+</body>
+</html>

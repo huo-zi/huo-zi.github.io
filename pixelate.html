@@ -1,0 +1,37 @@
+<html>
+<head>
+	<script type="text/javascript" src="/source/js/pixelate.js?8"></script>
+
+</head>
+<body>
+	<img id="gxr" src="http://www.game.com/source/image/images.png#206,138" width="150"/>
+	<br/>
+	NUM:<input value="4" onblur="change('num', this.value)"><br/>
+	SIZE:<input value="64" onblur="change('size', this.value)"><br/>
+	MIN:<input value="2" onblur="change('min', this.value)"><br/>
+	<button onclick="build()">build</button><br/>
+	<textarea id="newurl" rows="5" cols="50"></textarea>
+</body>
+<script type="text/javascript">
+	var x = document.getElementById('gxr');
+	var n = document.getElementById('newurl');
+	var p;
+	x.onload = function(){
+		var y = {};
+		y.i = x;
+		console.log(y);
+		p = x.pixelate();
+		p.loadPixelate();
+	}
+	
+	function change(type, value){
+		p[type] = value;
+		p.loadPixelate();
+		build();
+	}
+	
+	function build(){
+		n.value = p.build();
+	}
+</script>
+</html>
