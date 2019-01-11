@@ -15,7 +15,7 @@
 	<label for="coff">OFF</label><br/>
 	<button onclick="build()">build</button><br/>
 	<textarea id="newurl" rows="5" cols="50"></textarea><br/>
-	<button onclick="save('svg')">.svg</button><br/>
+	<button onclick="save('svg')">.svg</button><button onclick="save('png')">.png</button><br/>
 </body>
 <script type="text/javascript">
 	var x = document.getElementById('gxr');
@@ -24,7 +24,7 @@
 	x.onload = function(){
 		p = x.pixelate();
 		p.size = 128;
-		p.num = 8;
+		p.num = 16;
 		p.loadPixelate();
 	}
 	
@@ -41,40 +41,7 @@
 	}
 	
 	function save(type){
-		var svgString = new XMLSerializer().serializeToString(p.svg);
-		var blob = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
-		var DOMURL = self.URL || self.webkitURL || self;
-		var url = DOMURL.createObjectURL(blob);
-		if(type == 'png'){
-			var img = new Image();
-				img.crossOrigin = 'Anonymous';
-				img.src = 'data:image/svg+xml,' + unescape(encodeURIComponent(svgString));
-				document.body.appendChild(img);
-			var can = document.createElement('canvas');
-				can.setAttribute('width', p.width);
-				can.setAttribute('height', p.height);
-				console.log(p.width);
-				console.log(p.height);
-			var ctx = can.getContext('2d');
-				img.onload = function(){
-					ctx.drawImage(img, 0, 0);
-					document.body.appendChild(can);
-					//url = can.toDataURL('image/png');
-					//console.log(url);
-					//alink(type, url);
-				}
-		}else{
-			alink(type, url);
-		}
-	}
-	
-	function alink(type, url){
-		var aLink = document.createElement('a');
-		aLink.style.display = 'none';
-		aLink.download = 'img.' + type;
-		aLink.href = url;
-		document.body.appendChild(aLink);
-		aLink.click();
+		p.save(type);
 	}
 </script>
 </html>
