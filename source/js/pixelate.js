@@ -1,5 +1,4 @@
 var Pixelate = function(imgDom){
-	this.data = [];
 	this.img = imgDom;
 	this.size = 64;
 	this.min = 2;
@@ -105,6 +104,51 @@ Pixelate.prototype = {
 			this.src += '#' + this.tags.join('|');
 		}
 		return this.src;
+	},
+
+	save: function(type = 'svg'){
+		if(type == 'png'){
+			var pix = this;
+			var svg = this.svg.cloneNode(true);
+			 	svg.removeChild(svg.childNodes[0]);
+			var img = new Image();
+				img.src = this.src;
+				img.width = this.width;
+				img.height = this.height;
+			var svgimg = new Image();
+				svgimg.src = pix.svgurl(svg);
+				svgimg.width = this.width;
+				svgimg.height = this.height;
+			var can = document.createElement('canvas');
+				can.setAttribute('width', this.width);
+				can.setAttribute('height', this.height);
+			var ctx = can.getContext('2d');
+			img.onload = function(){
+				ctx.drawImage(this, 0, 0, this.width, this.height);
+				svgimg.onload = function(){
+					ctx.drawImage(this, 0, 0, this.width, this.height);
+					pix.down('png', can.toDataURL('image/png'));
+				}
+			}
+		}else{
+			this.down('svg', this.svgurl(this.svg));
+		}
+	},
+
+	svgurl: function(svg){
+		var svgString = new XMLSerializer().serializeToString(svg);
+		var blob = new Blob([svgString], {type: "image/svg+xml"});
+		var DOMURL = self.URL || self.webkitURL || self;
+		return DOMURL.createObjectURL(blob);
+	},
+	down: function(type, url){
+		var aLink = document.createElement('a');
+			aLink.style.display = 'none';
+			aLink.download = 'img.' + type;
+			aLink.href = url;
+		document.body.appendChild(aLink);
+		aLink.click();
+		document.body.removeChild(aLink);
 	}
 }
 
