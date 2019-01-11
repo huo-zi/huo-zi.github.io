@@ -1,37 +1,80 @@
 <html>
 <head>
-	<script type="text/javascript" src="/source/js/pixelate.js"></script>
+	<script type="text/javascript" src="/source/js/pixelate.js?11"></script>
 
 </head>
 <body>
-	<img id="gxr" src="/source/image/images.png"/>
+	<img id="gxr" src="/source/image/wechatimg3.jpg#329,371"/>
 	<br/>
-	NUM:<input value="4" onblur="change('num', this.value)"><br/>
-	SIZE:<input value="64" onblur="change('size', this.value)"><br/>
+	NUM:<input value="8" onblur="change('num', this.value)"><br/>
+	SIZE:<input value="128" onblur="change('size', this.value)"><br/>
 	MIN:<input value="2" onblur="change('min', this.value)"><br/>
+	CLEAN:<input name="clean" type="radio" id="con" onclick="change('canClean', true)"/>
+	<label for="ccon">ON</label>
+	<input name="clean" type="radio" id="coff" checked onclick="change('canClean', false)"/>
+	<label for="coff">OFF</label><br/>
 	<button onclick="build()">build</button><br/>
-	<textarea id="newurl" rows="5" cols="50"></textarea>
+	<textarea id="newurl" rows="5" cols="50"></textarea><br/>
+	<button onclick="save('svg')">.svg</button><br/>
 </body>
 <script type="text/javascript">
 	var x = document.getElementById('gxr');
 	var n = document.getElementById('newurl');
 	var p;
 	x.onload = function(){
-		var y = {};
-		y.i = x;
-		console.log(y);
 		p = x.pixelate();
+		p.size = 128;
+		p.num = 8;
 		p.loadPixelate();
 	}
 	
 	function change(type, value){
 		p[type] = value;
-		p.loadPixelate();
-		build();
+		if(type != 'canClean'){
+			p.loadPixelate();
+			build();
+		}
 	}
 	
 	function build(){
 		n.value = p.build();
+	}
+	
+	function save(type){
+		var svgString = new XMLSerializer().serializeToString(p.svg);
+		var blob = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
+		var DOMURL = self.URL || self.webkitURL || self;
+		var url = DOMURL.createObjectURL(blob);
+		if(type == 'png'){
+			var img = new Image();
+				img.crossOrigin = 'Anonymous';
+				img.src = 'data:image/svg+xml,' + unescape(encodeURIComponent(svgString));
+				document.body.appendChild(img);
+			var can = document.createElement('canvas');
+				can.setAttribute('width', p.width);
+				can.setAttribute('height', p.height);
+				console.log(p.width);
+				console.log(p.height);
+			var ctx = can.getContext('2d');
+				img.onload = function(){
+					ctx.drawImage(img, 0, 0);
+					document.body.appendChild(can);
+					//url = can.toDataURL('image/png');
+					//console.log(url);
+					//alink(type, url);
+				}
+		}else{
+			alink(type, url);
+		}
+	}
+	
+	function alink(type, url){
+		var aLink = document.createElement('a');
+		aLink.style.display = 'none';
+		aLink.download = 'img.' + type;
+		aLink.href = url;
+		document.body.appendChild(aLink);
+		aLink.click();
 	}
 </script>
 </html>
