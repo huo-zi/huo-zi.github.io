@@ -1,0 +1,42 @@
+<html>
+<head>
+<script type="text/javascript">
+
+var upload = function(file){
+	var cav = document.createElement('canvas');
+	var ctx = cav.getContext('2d');
+	var fr = new FileReader();
+	var img = new Image();
+	var chr = [' ','.','^','"','~',':','+','=','v','c','s','o','*','&','%','A','8','#','$','@'];
+	var data = [];
+	fr.readAsDataURL(file.files[0]);
+	fr.onload = function(env){
+		img.src = env.target.result;
+		img.onload = function(){
+			cav.width = this.width;
+			cav.height = this.height;
+			ctx.drawImage(this, 0, 0, this.width, this.height);
+			data = ctx.getImageData(0, 0, this.width, this.height).data;
+
+			var text = '';
+			for(var i=0;i<data.length;i+=4){
+				var gray = Math.round(0.2989 * data[i] + 0.5870 * +data[i+1] + 0.1140 * data[i+2]);
+				var index = parseInt((1 - gray/255) * (chr.length - 1));
+				text += chr[index];
+				if(i/4 % this.width == 0 && i > 0){
+					text += "\n";
+				}
+			}
+			
+			document.getElementById('chr').innerHTML = text;
+		}
+	}
+}
+
+</script>
+</head>
+<body>
+	<input type="file" id="ufile" onchange="upload(this)"/><br/>
+	<pre id="chr" style="font-size:2px;"></pre>
+</body>
+</html>
