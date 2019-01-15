@@ -1,31 +1,39 @@
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <script type="text/javascript">
 
-var upload = function(file){
+var upload = function(){
+	var file = document.getElementById('ufile').files[0];
+	var size = document.getElementById('size');
+		size = size.options[size.selectedIndex].value;
 	var cav = document.createElement('canvas');
 	var ctx = cav.getContext('2d');
 	var fr = new FileReader();
 	var img = new Image();
-	var chr = [' ','.','^','"','~',':','+','=','v','c','s','o','*','&','%','A','8','#','$','@'];
+	var chr = [' ','.','^','"','~','+','=','v','c','o','s','a','&','%','A','8','#','$','@'];
 	var data = [];
-	fr.readAsDataURL(file.files[0]);
+	fr.readAsDataURL(file);
 	fr.onload = function(env){
 		img.src = env.target.result;
 		img.onload = function(){
-			cav.width = this.width;
-			cav.height = this.height;
-			ctx.drawImage(this, 0, 0, this.width, this.height);
-			data = ctx.getImageData(0, 0, this.width, this.height).data;
+			var nw = size > 0 ? size : this.width;
+			var nh = this.height * nw / this.width;
+			cav.width = nw;
+			cav.height = nh;
+			ctx.drawImage(this, 0, 0, this.width, this.height, 0, 0, nw, nh);
+			data = ctx.getImageData(0, 0, nw, nh).data;
 
 			var text = '';
+			var line = 1;
 			for(var i=0;i<data.length;i+=4){
 				var gray = Math.round(0.2989 * data[i] + 0.5870 * +data[i+1] + 0.1140 * data[i+2]);
 				var index = parseInt((1 - gray/255) * (chr.length - 1));
-				text += chr[index];
-				if(i/4 % this.width == 0 && i > 0){
+				if(i/4 % nw == 0 && i > 0){
 					text += "\n";
+					i += nw * 4;
 				}
+				text += chr[index];
 			}
 			
 			document.getElementById('chr').innerHTML = text;
@@ -36,7 +44,14 @@ var upload = function(file){
 </script>
 </head>
 <body>
-	<input type="file" id="ufile" onchange="upload(this)"/><br/>
-	<pre id="chr" style="font-size:2px;"></pre>
+	原图宽度压缩:
+	<select id="size" onchange="upload()">
+		<option value="0">无</option>
+		<option value="100">100</option>
+		<option value="200" selected>200</option>
+		<option value="400">400</option>
+	</select>
+	<input type="file" id="ufile" onchange="upload()"/><br/>
+	<pre id="chr" style="font-size:12px;line-height:14px;"></pre>
 </body>
 </html>
