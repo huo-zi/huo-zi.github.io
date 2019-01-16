@@ -5,19 +5,20 @@
 
 var upload = function(){
 	var file = document.getElementById('ufile').files[0];
+	if(file == undefined) return false;
 	var size = document.getElementById('size');
 		size = size.options[size.selectedIndex].value;
 	var cav = document.createElement('canvas');
 	var ctx = cav.getContext('2d');
 	var fr = new FileReader();
 	var img = new Image();
-	var chr = [' ','.','^','"','~','+','=','v','c','o','s','a','&','%','A','8','#','$','@'];
+	var chr = '@#$8%&asocv=+~"^. ';
 	var data = [];
 	fr.readAsDataURL(file);
-	fr.onload = function(env){
-		img.src = env.target.result;
+	fr.onload = function(event){
+		img.src = event.target.result;
 		img.onload = function(){
-			var nw = size > 0 ? size : this.width;
+			var nw = size > 0 && this.width > size ? size : this.width;
 			var nh = this.height * nw / this.width;
 			cav.width = nw;
 			cav.height = nh;
@@ -27,8 +28,9 @@ var upload = function(){
 			var text = '';
 			var line = 1;
 			for(var i=0;i<data.length;i+=4){
-				var gray = Math.round(0.2989 * data[i] + 0.5870 * +data[i+1] + 0.1140 * data[i+2]);
-				var index = parseInt((1 - gray/255) * (chr.length - 1));
+				var gray = Math.round(0.2989 * data[i] + 0.5870 * data[i+1] + 0.1140 * data[i+2]);
+					gray = 255 - data[i+3] * (1 - gray / 255);
+				var index = parseInt(gray / 255 * (chr.length - 1));
 				if(i/4 % nw == 0 && i > 0){
 					text += "\n";
 					i += nw * 4;
@@ -47,8 +49,8 @@ var upload = function(){
 	原图宽度压缩:
 	<select id="size" onchange="upload()">
 		<option value="0">无</option>
-		<option value="100">100</option>
-		<option value="200" selected>200</option>
+		<option value="100" selected>100</option>
+		<option value="200">200</option>
 		<option value="400">400</option>
 	</select>
 	<input type="file" id="ufile" onchange="upload()"/><br/>
