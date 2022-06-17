@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>火子</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="NUM: 	SIZE: 	MIN: 	CLEAN: 	ON 	 	OFF 	build 	 	.svg.png   	var x &#x3D; document.getElementById(&#39;gxr&#39;); 	var n &#x3D; document.getElementById(&#39;newurl&#39;); 	var p; 	x.onload &#x3D; function(){ 		p &#x3D; x.pixel">
+<meta property="og:type" content="website">
+<meta property="og:title" content="火子">
+<meta property="og:url" content="https://huozi1024.github.io/demo/pixelate.html">
+<meta property="og:site_name" content="火子">
+<meta property="og:description" content="NUM: 	SIZE: 	MIN: 	CLEAN: 	ON 	 	OFF 	build 	 	.svg.png   	var x &#x3D; document.getElementById(&#39;gxr&#39;); 	var n &#x3D; document.getElementById(&#39;newurl&#39;); 	var p; 	x.onload &#x3D; function(){ 		p &#x3D; x.pixel">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://huozi1024.github.io/source/image/wechatimg3.jpg#329,371">
+<meta property="article:published_time" content="2022-06-17T06:46:06.983Z">
+<meta property="article:modified_time" content="2022-06-17T06:46:06.983Z">
+<meta property="article:author" content="Huozi">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://huozi1024.github.io/source/image/wechatimg3.jpg#329,371">
+  
+    <link rel="alternate" href="/atom.xml" title="火子" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">火子</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://huozi1024.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="page-" class="h-entry article article-type-page" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/demo/pixelate.html" class="article-date">
+  <time class="dt-published" datetime="2022-06-17T06:46:06.983Z" itemprop="datePublished">2022-06-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <html>
+<head>
+	<script type="text/javascript" src="/source/js/pixelate.js?11"></script>
+
+</head>
+<body>
+	<img id="gxr" src="/source/image/wechatimg3.jpg#329,371"/>
+	<br/>
+	NUM:<input value="8" onblur="change('num', this.value)"><br/>
+	SIZE:<input value="128" onblur="change('size', this.value)"><br/>
+	MIN:<input value="2" onblur="change('min', this.value)"><br/>
+	CLEAN:<input name="clean" type="radio" id="con" onclick="change('canClean', true)"/>
+	<label for="ccon">ON</label>
+	<input name="clean" type="radio" id="coff" checked onclick="change('canClean', false)"/>
+	<label for="coff">OFF</label><br/>
+	<button onclick="build()">build</button><br/>
+	<textarea id="newurl" rows="5" cols="50"></textarea><br/>
+	<button onclick="save('svg')">.svg</button><button onclick="save('png')">.png</button><br/>
+</body>
+<script type="text/javascript">
+	var x = document.getElementById('gxr');
+	var n = document.getElementById('newurl');
+	var p;
+	x.onload = function(){
+		p = x.pixelate();
+		p.size = 128;
+		p.num = 16;
+		p.loadPixelate();
+	}
+	
+	function change(type, value){
+		p[type] = value;
+		if(type != 'canClean'){
+			p.loadPixelate();
+			build();
+		}
+	}
+	
+	function build(){
+		n.value = p.build();
+	}
+	
+	function save(type){
+		p.save(type);
+	}
+</script>
+</html>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://huozi1024.github.io/demo/pixelate.html" data-id="cl4i380u40006aloi2ghp3d76" data-title="" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/other/" rel="tag">other</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/other/" style="font-size: 10px;">other</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/06/17/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Huozi<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
