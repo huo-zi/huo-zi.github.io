@@ -1,33 +1,42 @@
-# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
-# For more information see: https://help.github.com/actions/language-and-framework-guides/publishing-nodejs-packages
-
-name: Node.js Package
+name: deploy hexo
 
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      - master
 
 jobs:
-  build:
+  pages:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
-          node-version: 16
-      - run: npm ci
-      - run: npm test
-
-  publish-npm:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+          ref: master
+      - name: Use Node.js v12.x
+        uses: actions/setup-node@v2
         with:
-          node-version: 16
-          registry-url: https://registry.npmjs.org/
-      - run: npm ci
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          node-version: '12'
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install Dependencies
+        run: npm install
+      - name: Build
+        run: |
+          git clone https://github.com/f-dong/hexo-theme-minimalism.git themes/hexo-theme-minimalism
+          mv -f theme_config.yml themes/hexo-theme-minimalism/_config.yml
+          npm install
+          npm run build
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.ACCESS_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
+          full_commit_message: ${{ github.event.head_commit.message }}
+          keep_files: true
