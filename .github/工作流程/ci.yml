@@ -24,7 +24,11 @@ jobs:
       - name: Install Dependencies
         run: npm install
       - name: Build
-        run: npm run build
+        run: |
+          git clone https://github.com/f-dong/hexo-theme-minimalism.git themes/hexo-theme-minimalism
+          mv -f theme_config.yml themes/hexo-theme-minimalism/_config.yml
+          npm install
+          npm run build
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
