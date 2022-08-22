@@ -36,7 +36,7 @@ $messsage->send($robotKey); // 或使用 $robot->message($messsage);
 ```
 
 ### 2.作为Monolog的通道使用
-![效果图](/images/screen/20220822154952.png)
+![效果图](/source/image/screen/20220822154952.png)
 #### 2.1 配置通道
 * laravel框架
 在配置文件`logging.php`的`channels`数组中增加：
