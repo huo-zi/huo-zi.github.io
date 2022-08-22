@@ -1,0 +1,233 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+
+<meta charset="utf-8" >
+
+<title>使用企业微信群机器人发送消息及输出日志</title>
+<meta name="keywords" content="使用企业微信群机器人发送消息及输出日志, 火子">
+<meta name="description" content="这是一个企业微信群机器人的sdk
+0.安装
+composer require huo-zi&#x2F;work-wechat-robot
+
+php &lt; 8 || laravel &lt; 9
+
+composer require huo">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style/main.css">
+
+
+<link rel="stylesheet" href="/style/jquery.fancybox.min.css">
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 6.2.0"></head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://huo-zi.github.io">
+        <img class="avatar" src="/source/image/images.png" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://huo-zi.github.io">
+        <h1 class="site-title">火子</h1>
+      </a>
+    </div>
+    <div class="right">
+        <i class="icon menu-switch icon-menu-outline" ></i>
+    </div>
+  </div>
+</div>
+
+<div class="menu-container" style="height: 0;opacity: 0;">
+<nav class="menu-list">
+  
+    
+      <a href="/" class="menu purple-link">
+        首页
+      </a>
+    
+  
+    
+      <a href="/tags" class="menu purple-link">
+        标签
+      </a>
+    
+  
+    
+      <a href="/archives" class="menu purple-link">
+        归档
+      </a>
+    
+  
+    
+      <a href="/about" class="menu purple-link">
+        关于
+      </a>
+    
+  
+</nav>
+</div>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">使用企业微信群机器人发送消息及输出日志</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon icon-calendar-outline"></i> 2022-08-22</span>
+            
+              <span>
+              <i class="icon icon-pricetags-outline"></i>
+                
+                  <a href="/tags/PHP/">
+                  PHP
+                    
+                      ，
+                    
+                  </a>
+                
+                  <a href="/tags/laravel/">
+                  laravel
+                    
+                      ，
+                    
+                  </a>
+                
+                  <a href="/tags/wechat/">
+                  wechat
+                    
+                      ，
+                    
+                  </a>
+                
+                  <a href="/tags/robot/">
+                  robot
+                    
+                  </a>
+                
+              </span>
+            
+          </div>
+          <div class="post-content-wrapper">
+            <div class="post-content">
+              <p>这是一个企业微信群机器人的sdk</p>
+<h3 id="0-安装"><a href="#0-安装" class="headerlink" title="0.安装"></a>0.安装</h3><blockquote>
+<p>composer require huo-zi&#x2F;work-wechat-robot</p>
+</blockquote>
+<p>php &lt; 8 || laravel &lt; 9</p>
+<blockquote>
+<p>composer require huo-zi&#x2F;work-wechat-robot:~2.0</p>
+</blockquote>
+<h3 id="1-使用"><a href="#1-使用" class="headerlink" title="1.使用"></a>1.使用</h3><h4 id="1-1-直接使用"><a href="#1-1-直接使用" class="headerlink" title="1.1 直接使用"></a>1.1 直接使用</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$robot</span> = <span class="keyword">new</span> <span class="title class_">WorkWechatRobot</span>(<span class="variable">$robotKey</span>);</span><br><span class="line"><span class="variable">$robot</span>-&gt;<span class="title function_ invoke__">text</span>(<span class="variable">$content</span>); <span class="comment">// 文本消息</span></span><br><span class="line"><span class="variable">$robot</span>-&gt;<span class="title function_ invoke__">markdown</span>(<span class="variable">$content</span>); <span class="comment">// markdown消息</span></span><br><span class="line"><span class="variable">$robot</span>-&gt;<span class="title function_ invoke__">image</span>(<span class="variable">$filename</span>); <span class="comment">// 图片消息 支持本地图片和网络图片</span></span><br><span class="line"><span class="variable">$robot</span>-&gt;<span class="title function_ invoke__">news</span>(<span class="variable">$title</span>, <span class="variable">$url</span>, <span class="variable">$desc</span>, <span class="variable">$picurl</span>); <span class="comment">// 图文消息</span></span><br><span class="line"><span class="variable">$robot</span>-&gt;<span class="title function_ invoke__">file</span>(<span class="variable">$filename</span>); <span class="comment">// 发送上传文件</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="1-2-v2-1-0之后支持创建消息对象发送消息："><a href="#1-2-v2-1-0之后支持创建消息对象发送消息：" class="headerlink" title="1.2 v2.1.0之后支持创建消息对象发送消息："></a>1.2 v2.1.0之后支持创建消息对象发送消息：</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$messsage</span> = <span class="keyword">new</span> <span class="title class_">Text</span>();     <span class="comment">// new Markdwon(); new Image()...</span></span><br><span class="line"><span class="variable">$messsage</span>-&gt;<span class="title function_ invoke__">content</span>(<span class="string">&#x27;文本消息&#x27;</span>);</span><br><span class="line"><span class="variable">$messsage</span>-&gt;<span class="title function_ invoke__">send</span>(<span class="variable">$robotKey</span>); <span class="comment">// 或使用 $robot-&gt;message($messsage);</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-作为Monolog的通道使用"><a href="#2-作为Monolog的通道使用" class="headerlink" title="2.作为Monolog的通道使用"></a>2.作为Monolog的通道使用</h3><p><img src="/images/screen/20220822154952.png" alt="效果图"></p>
+<h4 id="2-1-配置通道"><a href="#2-1-配置通道" class="headerlink" title="2.1 配置通道"></a>2.1 配置通道</h4><ul>
+<li>laravel框架<br>在配置文件<code>logging.php</code>的<code>channels</code>数组中增加：</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;wxwork_robot&#x27;</span> =&gt; [  </span><br><span class="line">    <span class="string">&#x27;driver&#x27;</span> =&gt; <span class="string">&#x27;monolog&#x27;</span>,  </span><br><span class="line">    <span class="string">&#x27;level&#x27;</span> =&gt; <span class="string">&#x27;notice&#x27;</span>,  </span><br><span class="line">    <span class="string">&#x27;handler&#x27;</span> =&gt; <span class="title class_">\Huozi\WorkWechat\Monolog\Handler\RobotHandler</span>::<span class="variable language_">class</span>,  </span><br><span class="line">    <span class="string">&#x27;handler_with&#x27;</span> =&gt; [  </span><br><span class="line">        <span class="string">&#x27;robotKey&#x27;</span> =&gt; <span class="string">&#x27;your_wxwork_robot_key&#x27;</span>,  </span><br><span class="line">    ],  </span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+<p>然后修改<code>channels</code>节点<code>stack</code>，在<code>channels</code>中增加<code>wxwork_robot</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;stack&#x27;</span> =&gt; [</span><br><span class="line">    <span class="string">&#x27;driver&#x27;</span> =&gt; <span class="string">&#x27;stack&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;channels&#x27;</span> =&gt; [<span class="string">&#x27;single&#x27;</span>, ... , <span class="string">&#x27;wxwork_robot&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;ignore_exceptions&#x27;</span> =&gt; <span class="literal">false</span>,</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+
+<p>详见<a target="_blank" rel="noopener" href="https://learnku.com/docs/laravel/8.x/logging/9376#advanced-monolog-channel-customization">laravel高度自定义Monolog通道</a></p>
+<ul>
+<li>其他框架</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$logger</span> = <span class="keyword">new</span> <span class="title class_">\Monolog\Logger</span>(<span class="variable">$name</span>);</span><br><span class="line"><span class="variable">$logger</span>-&gt;<span class="title function_ invoke__">pushHandler</span>(<span class="keyword">new</span> <span class="title class_">RobotHandler</span>(<span class="variable">$robotKey</span>));</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-日志格式化"><a href="#2-2-日志格式化" class="headerlink" title="2.2 日志格式化"></a>2.2 日志格式化</h4><p>提供了<code>TextFormatter</code>和<code>MarkdownFormatter</code>格式化原始日志，使日志内容方便阅读</p>
+<ul>
+<li>laravel框架,修改<code>logging.php</code>, 增加<code>formatter</code>：</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;wxwork_robot&#x27;</span> =&gt; [</span><br><span class="line">    <span class="string">&#x27;driver&#x27;</span> =&gt; <span class="string">&#x27;monolog&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;level&#x27;</span> =&gt; <span class="string">&#x27;notice&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;handler&#x27;</span> =&gt; <span class="title class_">\Huozi\WorkWechat\Monolog\Handler\RobotHandler</span>::<span class="variable language_">class</span>,</span><br><span class="line">    <span class="string">&#x27;handler_with&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;robotKey&#x27;</span> =&gt; <span class="string">&#x27;your_wxwork_robot_key&#x27;</span>,</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&#x27;formatter&#x27;</span> =&gt; <span class="title class_">\Huozi\WorkWechat\Monolog\Formatter\MarkdownFormatter</span>::<span class="variable language_">class</span>,```</span><br><span class="line"> ],</span><br></pre></td></tr></table></figure>
+
+<p><code>TextFormatter</code>和<code>MarkdownFormatter</code>都提供了默认的格式化结构，如果需要自定义可以：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;formatter&#x27;</span> =&gt; <span class="title class_">\Huozi\WorkWechat\Monolog\Formatter\TextFormatter</span>::<span class="variable language_">class</span>,</span><br><span class="line"><span class="string">&#x27;formatter_with&#x27;</span> =&gt; [</span><br><span class="line">    <span class="string">&#x27;messageFormat&#x27;</span> =&gt; <span class="string">&#x27;&#123;level_name&#125;:&#123;message&#125; \n &#123;extra.file&#125;:&#123;extra.line&#125;&#x27;</span>&lt;/b&gt;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>其他框架</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$messageFormat</span> = <span class="string">&#x27;&#123;level_name&#125;:&#123;message&#125; \n &#123;extra.file&#125;:&#123;extra.line&#125;&#x27;</span>;</span><br><span class="line"><span class="variable">$formatter</span> = <span class="keyword">new</span> <span class="title class_">TextFormatter</span>(<span class="variable">$messageFormat</span>);</span><br><span class="line"><span class="variable">$logger</span>-&gt;<span class="title function_ invoke__">pushHandler</span>((<span class="keyword">new</span> <span class="title class_">RobotHandler</span>(<span class="variable">$robotKey</span>))-&gt;<span class="title function_ invoke__">setFormatter</span>(<span class="variable">$formatter</span>));</span><br></pre></td></tr></table></figure>
+
+<h2 id="License"><a href="#License" class="headerlink" title="License"></a>License</h2><p>Licensed under <a href="LICENSE">The MIT License (MIT)</a>.</p>
+<hr>
+<p>GIT地址：<a target="_blank" rel="noopener" href="https://github.com/huozi1024/work-wechat-robot">work-wechat-robot</a></p>
+
+            </div>
+            <div class="top-div">
+              <ol class="top-box"><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#0-%E5%AE%89%E8%A3%85"><span class="top-box-text">0.安装</span></a></li><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#1-%E4%BD%BF%E7%94%A8"><span class="top-box-text">1.使用</span></a></li><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#2-%E4%BD%9C%E4%B8%BAMonolog%E7%9A%84%E9%80%9A%E9%81%93%E4%BD%BF%E7%94%A8"><span class="top-box-text">2.作为Monolog的通道使用</span></a></li></ol></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#License"><span class="top-box-text">License</span></a>
+            </div>
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="/2022/08/22/hello-world/">
+              <h3 class="post-title">
+                下一篇：Hello World
+              </h3>
+            </a>
+          </div>
+        
+      </div>
+
+    
+
+
+      <footer>
+<div class="site-footer">
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/huozi1024" target="_blank">
+          <i class="icon icon-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> <a href="https://github.com/f-dong/hexo-theme-minimalism" target="_blank">Theme</a>
+  
+  
+  
+  
+  
+  
+</div>
+</footer>
+
+
+    </div>
+    
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.fancybox.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+
+
+  </body>
+</html>
