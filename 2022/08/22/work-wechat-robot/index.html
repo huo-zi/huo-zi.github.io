@@ -133,7 +133,7 @@ composer require huo">
 
 <h4 id="1-2-v2-1-0之后支持创建消息对象发送消息："><a href="#1-2-v2-1-0之后支持创建消息对象发送消息：" class="headerlink" title="1.2 v2.1.0之后支持创建消息对象发送消息："></a>1.2 v2.1.0之后支持创建消息对象发送消息：</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$messsage</span> = <span class="keyword">new</span> <span class="title class_">Text</span>();     <span class="comment">// new Markdwon(); new Image()...</span></span><br><span class="line"><span class="variable">$messsage</span>-&gt;<span class="title function_ invoke__">content</span>(<span class="string">&#x27;文本消息&#x27;</span>);</span><br><span class="line"><span class="variable">$messsage</span>-&gt;<span class="title function_ invoke__">send</span>(<span class="variable">$robotKey</span>); <span class="comment">// 或使用 $robot-&gt;message($messsage);</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="2-作为Monolog的通道使用"><a href="#2-作为Monolog的通道使用" class="headerlink" title="2.作为Monolog的通道使用"></a>2.作为Monolog的通道使用</h3><p><img src="/images/screen/20220822154952.png" alt="效果图"></p>
+<h3 id="2-作为Monolog的通道使用"><a href="#2-作为Monolog的通道使用" class="headerlink" title="2.作为Monolog的通道使用"></a>2.作为Monolog的通道使用</h3><p><img src="/source/image/screen/20220822154952.png" alt="效果图"></p>
 <h4 id="2-1-配置通道"><a href="#2-1-配置通道" class="headerlink" title="2.1 配置通道"></a>2.1 配置通道</h4><ul>
 <li>laravel框架<br>在配置文件<code>logging.php</code>的<code>channels</code>数组中增加：</li>
 </ul>
