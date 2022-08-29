@@ -1,7 +1,11 @@
 ---
 title: 在laravel中使用mysql fulltext全文索引代替like查询
-date: 2022-08-22 17:23:22
+date: 2022-08-23 17:23:22
 tags:
+    - mysql
+    - laravel
+    - fulltext
+    - index
 ---
 
 在laravel中使用`mysql` `fulltext`全文索引代替`like`提高性能(众所周知`like`查询以`%`开头，会导致索引失效)。
