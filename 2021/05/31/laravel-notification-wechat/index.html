@@ -1,0 +1,273 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+
+<meta charset="utf-8" >
+
+<title>laravel 微信通知 laravel-notification-wechat</title>
+<meta name="keywords" content="laravel 微信通知 laravel-notification-wechat, 火子">
+<meta name="description" content="自己造了一个laravel框架下基于laravel-wechat使用微信消息通知作为notification通道的composer包,使用前需先熟读laravel-消息通知目前已支持：
+
+公众号模板消息
+小程序模板消息
+开放平台公众号模板消">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style/main.css">
+
+
+<link rel="stylesheet" href="/style/jquery.fancybox.min.css">
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 6.2.0"></head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://huo-zi.github.io">
+        <img class="avatar" src="/source/image/images.png" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://huo-zi.github.io">
+        <h1 class="site-title">火子</h1>
+      </a>
+    </div>
+    <div class="right">
+        <i class="icon menu-switch icon-menu-outline" ></i>
+    </div>
+  </div>
+</div>
+
+<div class="menu-container" style="height: 0;opacity: 0;">
+<nav class="menu-list">
+  
+    
+      <a href="/" class="menu purple-link">
+        首页
+      </a>
+    
+  
+    
+      <a href="/tags" class="menu purple-link">
+        标签
+      </a>
+    
+  
+    
+      <a href="/archives" class="menu purple-link">
+        归档
+      </a>
+    
+  
+    
+      <a href="/about" class="menu purple-link">
+        关于
+      </a>
+    
+  
+</nav>
+</div>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">laravel 微信通知 laravel-notification-wechat</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon icon-calendar-outline"></i> 2021-05-31</span>
+            
+              <span>
+              <i class="icon icon-pricetags-outline"></i>
+                
+                  <a href="/tags/laravel/">
+                  laravel
+                    
+                      ，
+                    
+                  </a>
+                
+                  <a href="/tags/PHP/">
+                  PHP
+                    
+                      ，
+                    
+                  </a>
+                
+                  <a href="/tags/notification/">
+                  notification
+                    
+                      ，
+                    
+                  </a>
+                
+                  <a href="/tags/wechat/">
+                  wechat
+                    
+                  </a>
+                
+              </span>
+            
+          </div>
+          <div class="post-content-wrapper">
+            <div class="post-content">
+              <p>自己造了一个laravel框架下基于<a target="_blank" rel="noopener" href="https://github.com/overtrue/laravel-wechat">laravel-wechat</a>使用微信消息通知作为notification通道的composer包,使用前需先熟读<a target="_blank" rel="noopener" href="https://learnku.com/docs/laravel/8.x/notifications/9396">laravel-消息通知</a><br>目前已支持：</p>
+<ul>
+<li>公众号模板消息</li>
+<li>小程序模板消息</li>
+<li>开放平台公众号模板消息</li>
+<li>开放平台小程序模板消息</li>
+<li>企业微信消息</li>
+<li>企业微信开放平台消息</li>
+</ul>
+<h2 id="使用方式："><a href="#使用方式：" class="headerlink" title="使用方式："></a>使用方式：</h2><h3 id="0-添加composer包："><a href="#0-添加composer包：" class="headerlink" title="0. 添加composer包："></a>0. 添加composer包：</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require &quot;huo-zi/laravel-wechat-notification&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-在继承了notification的通知类中可以使用如下方法："><a href="#1-在继承了notification的通知类中可以使用如下方法：" class="headerlink" title="1. 在继承了notification的通知类中可以使用如下方法："></a>1. 在继承了<code>notification</code>的通知类中可以使用如下方法：</h3><ul>
+<li>设置发送<a target="_blank" rel="noopener" href="https://learnku.com/docs/laravel/8.x/notifications/9396#490165">指定频道</a>：</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">via</span>(<span class="params"><span class="variable">$notifiable</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * 支持的via列表</span></span><br><span class="line"><span class="comment">     * official_account：公众号</span></span><br><span class="line"><span class="comment">     * mini_program：小程序</span></span><br><span class="line"><span class="comment">     * open_official_account：开放平台公众号</span></span><br><span class="line"><span class="comment">     * open_mini_program：开放平台小程序</span></span><br><span class="line"><span class="comment">     * work：企业微信</span></span><br><span class="line"><span class="comment">     * open_work：开放平台企业微信</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">return</span> [<span class="string">&#x27;official_account&#x27;</span>, <span class="string">&#x27;mini_program&#x27;</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用公众号发送模板消息：</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">toOfficialAccount</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">WechatMessage</span>::<span class="title function_ invoke__">officialAccount</span>(<span class="string">&#x27;app_name&#x27;</span>)-&gt;<span class="title function_ invoke__">template</span>(<span class="string">&#x27;templateId&#x27;</span>)-&gt;<span class="title function_ invoke__">url</span>(<span class="variable">$url</span>)-&gt;<span class="title function_ invoke__">data</span>([<span class="string">&#x27;fisrt&#x27;</span>=&gt;<span class="string">&#x27;...&#x27;</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用小程序发送模板消息：</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">toMiniProgram</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">WechatMessage</span>::<span class="title function_ invoke__">miniProgram</span>(<span class="string">&#x27;app_name&#x27;</span>)-&gt;<span class="title function_ invoke__">template</span>(<span class="variable">$templateId</span>)-&gt;<span class="title function_ invoke__">formId</span>(<span class="variable">$formId</span>)-&gt;<span class="title function_ invoke__">data</span>([</span><br><span class="line">        <span class="string">&#x27;first&#x27;</span> =&gt; <span class="string">&#x27;&#x27;</span></span><br><span class="line">        //</span><br><span class="line">    ]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用开放平台公众号发送模板消息：</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">toOpenOfficialAccount</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">WechatMessage</span>::<span class="title function_ invoke__">openFlatform</span>(<span class="variable">$name</span>)-&gt;<span class="title function_ invoke__">officateAccount</span>(<span class="variable">$appId</span>, <span class="variable">$refreshToken</span>, <span class="variable">$accessToken</span>)-&gt;<span class="title function_ invoke__">template</span>(<span class="string">&#x27;templateId&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 或使用闭包创建开放平台的公众号对象</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">toOpenOfficialAccount</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">WechatMessage</span>::<span class="title function_ invoke__">openFlatform</span>(<span class="variable">$name</span>)-&gt;<span class="title function_ invoke__">officateAccount</span>(function (<span class="variable">$open</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$open</span>-&gt;<span class="title function_ invoke__">officateAccount</span>(<span class="variable">$appId</span>, <span class="variable">$refreshToken</span>, <span class="variable">$accessToken</span>);</span><br><span class="line">    &#125;)-&gt;<span class="title function_ invoke__">template</span>(<span class="string">&#x27;templateId&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 或创建好开放平台对象后使用</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">toOpenOfficialAccount</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">new</span> <span class="title class_">WechatPlatform</span>(<span class="variable">$openPlatform</span>))-&gt;<span class="title function_ invoke__">officateAccount</span>(<span class="variable">$appId</span>, <span class="variable">$refreshToken</span>, <span class="variable">$accessToken</span>)-&gt;<span class="title function_ invoke__">template</span>(<span class="variable">$templateId</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用开放平台小程序发送模板消息：</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">toOpenMiniProgram</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">WechatMessage</span>::<span class="title function_ invoke__">openFlatform</span>(<span class="variable">$name</span>)-&gt;<span class="title function_ invoke__">miniProgram</span>(<span class="variable">$appId</span>, <span class="variable">$refreshToken</span>, <span class="variable">$accessToken</span>)-&gt;<span class="title function_ invoke__">template</span>(<span class="variable">$templateId</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用企业微信发送消息：</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">toWork</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">WechatMessage</span>::<span class="title function_ invoke__">work</span>(<span class="variable">$name</span>)-&gt;<span class="title function_ invoke__">message</span>(<span class="variable">$message</span>)-&gt;<span class="title function_ invoke__">ofAgent</span>(<span class="variable">$agentId</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用开放平台企业微信发送消息：</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">toOpenWork</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">WechatMessage</span>::<span class="title function_ invoke__">openWork</span>(<span class="variable">$name</span>)-&gt;<span class="title function_ invoke__">work</span>(<span class="variable">$authCorpId</span>, <span class="variable">$permanentCode</span>)-&gt;<span class="title function_ invoke__">message</span>(<span class="variable">$message</span>)-&gt;<span class="title function_ invoke__">ofAgent</span>(<span class="variable">$agentId</span>);</span><br><span class="line">    <span class="comment">// 同样也支持创建好开放平台对象后使用及闭包创建work对象</span></span><br><span class="line">    <span class="variable">$messenger</span> = (<span class="keyword">new</span> <span class="title class_">WechatOpenWork</span>(<span class="variable">$openWork</span>))-&gt;<span class="title function_ invoke__">work</span>(function(<span class="variable">$openWork</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$openWork</span>-&gt;<span class="title function_ invoke__">work</span>(<span class="variable">$authCorpId</span>, <span class="variable">$permanentCode</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$messenger</span>-&gt;<span class="title function_ invoke__">message</span>(<span class="variable">$message</span>)-&gt;<span class="title function_ invoke__">ofAgent</span>(<span class="variable">$agentid</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-在使用了triat-Notifiable的模型里增加获取对应openid-userid的方法："><a href="#2-在使用了triat-Notifiable的模型里增加获取对应openid-userid的方法：" class="headerlink" title="2. 在使用了triat Notifiable的模型里增加获取对应openid/userid的方法："></a>2. 在使用了<code>triat</code> <code>Notifiable</code>的模型里增加获取对应<code>openid/userid</code>的方法：</h3><p>可以参考官方文档里发送邮件通知时<a target="_blank" rel="noopener" href="https://learnku.com/docs/laravel/8.x/notifications/9396#ac905f">自定义收件人</a></p>
+<ul>
+<li>获取公众号<code>openid</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">routeNotificationForOfficialAccount</span>(<span class="params"><span class="variable">$notification</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 返回当前model的公众号openid</span></span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;openid;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>获取小程序<code>openid</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">routeNotificationForMiniProgram</span>(<span class="params"><span class="variable">$notification</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 返回当前model的小程序openid</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>获取开放平台公众号<code>openid</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">routeNotificationForOpenOfficialAccount</span>(<span class="params"><span class="variable">$notification</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 返回对应开放平台公众号用户的openid</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>获取开放平台小程序<code>openid</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">routeNotificationForOpenMiniProgram</span>(<span class="params"><span class="variable">$notification</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 返回对应开放平台小程序用户的openid</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>获取企业微信<code>userid</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">routeNotificationForWork</span>(<span class="params"><span class="variable">$notification</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 返回当前model的企业微信userid</span></span><br><span class="line">    <span class="keyword">return</span> ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>获取开放平台企业微信<code>userid</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">routeNotificationForOpenWork</span>(<span class="params"><span class="variable">$notification</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 返回对应开放平台企业用户userid</span></span><br><span class="line">    <span class="keyword">return</span> ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-可参考官方文档：发送通知"><a href="#3-可参考官方文档：发送通知" class="headerlink" title="3. 可参考官方文档：发送通知"></a>3. 可参考官方文档：<a target="_blank" rel="noopener" href="https://learnku.com/docs/laravel/8.x/notifications/9396#fd6d4c">发送通知</a></h3><p>使用<code>Notifiable</code>特性的<code>notify</code>方法可以给用户实例<a target="_blank" rel="noopener" href="https://learnku.com/docs/laravel/8.x/notifications/9396#37688f">发送通知</a>：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Notifications</span>\<span class="title">WorkNotify</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$user</span>-&gt;<span class="title function_ invoke__">notify</span>(<span class="keyword">new</span> <span class="title class_">WorkNotify</span>(<span class="keyword">new</span> <span class="title class_">Text</span>(<span class="string">&#x27;你好啊~&#x27;</span>)));</span><br></pre></td></tr></table></figure>
+
+<p>使用<code>Notification</code>facade 给多个可接收通知的实体<a target="_blank" rel="noopener" href="https://learnku.com/docs/laravel/8.x/notifications/9396#dc8524">发送通知</a></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Notification</span>::<span class="title function_ invoke__">send</span>(<span class="variable">$users</span>, <span class="keyword">new</span> <span class="title class_">WorkNotify</span>(<span class="keyword">new</span> <span class="title class_">Markdown</span>(<span class="string">&#x27;#你好啊~&#x27;</span>)));</span><br></pre></td></tr></table></figure>
+
+<h2 id="License"><a href="#License" class="headerlink" title="License"></a>License</h2><p>Licensed under <a href="LICENSE">The MIT License (MIT)</a>.</p>
+<hr>
+<p>GIT地址：<a target="_blank" rel="noopener" href="https://github.com/huo-zi/laravel-wechat-notification">laravel-wechat-notification</a></p>
+
+            </div>
+            <div class="top-div">
+              <ol class="top-box"><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F%EF%BC%9A"><span class="top-box-text">使用方式：</span></a><ol class="top-box-child"><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#0-%E6%B7%BB%E5%8A%A0composer%E5%8C%85%EF%BC%9A"><span class="top-box-text">0. 添加composer包：</span></a></li><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#1-%E5%9C%A8%E7%BB%A7%E6%89%BF%E4%BA%86notification%E7%9A%84%E9%80%9A%E7%9F%A5%E7%B1%BB%E4%B8%AD%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8%E5%A6%82%E4%B8%8B%E6%96%B9%E6%B3%95%EF%BC%9A"><span class="top-box-text">1. 在继承了notification的通知类中可以使用如下方法：</span></a></li><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#2-%E5%9C%A8%E4%BD%BF%E7%94%A8%E4%BA%86triat-Notifiable%E7%9A%84%E6%A8%A1%E5%9E%8B%E9%87%8C%E5%A2%9E%E5%8A%A0%E8%8E%B7%E5%8F%96%E5%AF%B9%E5%BA%94openid-userid%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%9A"><span class="top-box-text">2. 在使用了triat Notifiable的模型里增加获取对应openid&#x2F;userid的方法：</span></a></li><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#3-%E5%8F%AF%E5%8F%82%E8%80%83%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%9A%E5%8F%91%E9%80%81%E9%80%9A%E7%9F%A5"><span class="top-box-text">3. 可参考官方文档：发送通知</span></a></li></ol></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#License"><span class="top-box-text">License</span></a></li></ol>
+            </div>
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="/2019/05/12/hello-world/">
+              <h3 class="post-title">
+                下一篇：过去做的一些小玩意儿
+              </h3>
+            </a>
+          </div>
+        
+      </div>
+
+    
+
+
+      <footer>
+<div class="site-footer">
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/huozi1024" target="_blank">
+          <i class="icon icon-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> <a href="https://github.com/f-dong/hexo-theme-minimalism" target="_blank">Theme</a>
+  
+  
+  
+  
+  
+  
+</div>
+</footer>
+
+
+    </div>
+    
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.fancybox.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+
+
+  </body>
+</html>
