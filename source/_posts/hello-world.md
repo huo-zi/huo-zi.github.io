@@ -14,7 +14,7 @@ tags:
 ![截图](/source/image/screen/puzzle.png)
 
 ### 图片字符画
-将图片转换为[字符画](/demo/chr.html)
+将图片转换为[字符画](/demo/char.html)
 ![截图](/source/image/screen/chr.png)
 
 ### 图片马赛克
