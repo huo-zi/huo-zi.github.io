@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+
+<meta charset="utf-8" >
+
+<title>在laravel中使用mysql fulltext全文索引代替like查询</title>
+<meta name="keywords" content="在laravel中使用mysql fulltext全文索引代替like查询, 火子">
+<meta name="description" content="在laravel中使用mysql fulltext全文索引代替like提高性能(众所周知like查询以%开头，会导致索引失效)。
+创建全文索引首先需要注意：
+
+InnoDB 在 mysql5.6才支持全文索引。全文索引默认是英文分词(即空格">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style/main.css">
+
+
+<link rel="stylesheet" href="/style/jquery.fancybox.min.css">
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 6.2.0"></head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://huo-zi.github.io">
+        <img class="avatar" src="/source/image/images.png" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://huo-zi.github.io">
+        <h1 class="site-title">火子</h1>
+      </a>
+    </div>
+    <div class="right">
+        <i class="icon menu-switch icon-menu-outline" ></i>
+    </div>
+  </div>
+</div>
+
+<div class="menu-container" style="height: 0;opacity: 0;">
+<nav class="menu-list">
+  
+    
+      <a href="/" class="menu purple-link">
+        首页
+      </a>
+    
+  
+    
+      <a href="/tags" class="menu purple-link">
+        标签
+      </a>
+    
+  
+    
+      <a href="/archives" class="menu purple-link">
+        归档
+      </a>
+    
+  
+    
+      <a href="/about" class="menu purple-link">
+        关于
+      </a>
+    
+  
+</nav>
+</div>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">在laravel中使用mysql fulltext全文索引代替like查询</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon icon-calendar-outline"></i> 2022-08-22</span>
+            
+          </div>
+          <div class="post-content-wrapper">
+            <div class="post-content">
+              <p>在laravel中使用<code>mysql</code> <code>fulltext</code>全文索引代替<code>like</code>提高性能(众所周知<code>like</code>查询以<code>%</code>开头，会导致索引失效)。</p>
+<h4 id="创建全文索引"><a href="#创建全文索引" class="headerlink" title="创建全文索引"></a>创建全文索引</h4><p>首先需要注意：</p>
+<blockquote>
+<p>InnoDB 在 mysql5.6才支持全文索引。全文索引默认是英文分词(即空格分词)，在mysql5.7.6中内置了ngram全文解析器, 用来支持亚洲语种的分词</p>
+</blockquote>
+<p>所以如果需要搜索中文需要mysql版本&gt;&#x3D;5.7.6</p>
+<p>创建索引SQL：</p>
+<h5 id="1-使用CREATE-TABLE创建"><a href="#1-使用CREATE-TABLE创建" class="headerlink" title="1.使用CREATE TABLE创建"></a>1.使用<code>CREATE TABLE</code>创建</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE tbl_name(</span><br><span class="line">...</span><br><span class="line">FULLTEXT INDEX [index_name] (key_part,...) WITH PARSER `ngram`</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-使用ALTER-TABLE创建"><a href="#2-使用ALTER-TABLE创建" class="headerlink" title="2.使用ALTER TABLE创建"></a>2.使用<code>ALTER TABLE</code>创建</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE tbl_name</span><br><span class="line">ADD FULLTEXT INDEX [index_name] (key_part,...) WITH PARSER `ngram`</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-使用CREATE-INDEX创建"><a href="#3-使用CREATE-INDEX创建" class="headerlink" title="3.使用CREATE INDEX创建"></a>3.使用<code>CREATE INDEX</code>创建</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE FULLTEXT INDEX index_name ON tbl_name (key_part,...)  WITH PARSER `ngram`</span><br></pre></td></tr></table></figure>
+
+<h3 id="执行搜索"><a href="#执行搜索" class="headerlink" title="执行搜索"></a>执行搜索</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MATCH (col1,col2,...) AGAINST (expr [search_modifier])</span><br></pre></td></tr></table></figure>
+<p>使用全文索引进行搜索时有三种模式：</p>
+<h5 id="1-自然语言模式-IN-NATURAL-LANGUAGE-MODE"><a href="#1-自然语言模式-IN-NATURAL-LANGUAGE-MODE" class="headerlink" title="1.自然语言模式[IN NATURAL LANGUAGE MODE]"></a>1.自然语言模式[IN NATURAL LANGUAGE MODE]</h5><p>默认模式，不能使用操作符，即搜索的词必须要出现</p>
+<blockquote>
+<p>例子：SELECT * FROM tbl_name WHERE MATCH(name,summory) AGAINST (‘测试’)</p>
+</blockquote>
+<h5 id="2-布尔模式-IN-BOOLEAN-MODE"><a href="#2-布尔模式-IN-BOOLEAN-MODE" class="headerlink" title="2.布尔模式[IN BOOLEAN MODE]"></a>2.布尔模式[IN BOOLEAN MODE]</h5><p>可以使用操作符，支持指定关键词必须出现(+)、必须不能出现(-)或权重高低</p>
+<blockquote>
+<p>例子：SELECT * FROM tbl_name WHERE MATCH(name,summory) AGAINST (‘+测试 -公司’ IN BOOLEAN MODE)</p>
+</blockquote>
+<h5 id="3-查询扩展模式-IN-NATURAL-LANGUAGE-MODE-WITH-QUERY-EXPANSION"><a href="#3-查询扩展模式-IN-NATURAL-LANGUAGE-MODE-WITH-QUERY-EXPANSION" class="headerlink" title="3.查询扩展模式[IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION]"></a>3.查询扩展模式[IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION]</h5><p>基于自然语言模式，根据自然模式搜索到的结果扩展查询</p>
+<blockquote>
+<p>例子：SELECT * FROM tbl_name WHERE MATCH(name,summory) AGAINST (‘测试’ IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION)</p>
+</blockquote>
+<h3 id="在laravel中使用"><a href="#在laravel中使用" class="headerlink" title="在laravel中使用"></a>在laravel中使用</h3><h5 id="1-laravel框架在9-x中已支持全文索引"><a href="#1-laravel框架在9-x中已支持全文索引" class="headerlink" title="1.laravel框架在9.x中已支持全文索引"></a>1.laravel框架在9.x中已支持全文索引</h5><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 自然语言模式</span></span><br><span class="line">DB::<span class="title function_ invoke__">table</span>(<span class="string">&#x27;tbl_name&#x27;</span>)-&gt;<span class="title function_ invoke__">whereFullText</span>(<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;测试&#x27;</span>)-&gt;<span class="title function_ invoke__">get</span>();</span><br><span class="line"><span class="comment">// 布尔模式</span></span><br><span class="line">DB::<span class="title function_ invoke__">table</span>(<span class="string">&#x27;tbl_name&#x27;</span>)-&gt;<span class="title function_ invoke__">whereFullText</span>([<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;summory&#x27;</span>], <span class="string">&#x27;+测试 -公司&#x27;</span>, [<span class="string">&#x27;mode&#x27;</span> =&gt; <span class="string">&#x27;boolean&#x27;</span>])-&gt;<span class="title function_ invoke__">count</span>();</span><br><span class="line"><span class="comment">// 自然扩展模式</span></span><br><span class="line">DB::<span class="title function_ invoke__">table</span>(<span class="string">&#x27;tbl_name&#x27;</span>)-&gt;<span class="title function_ invoke__">whereFullText</span>(<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;测试&#x27;</span>, [<span class="string">&#x27;expanded&#x27;</span> =&gt; <span class="literal">true</span>])-&gt;<span class="title function_ invoke__">paginate</span>(<span class="number">10</span>);</span><br><span class="line"><span class="comment">// 模型使用</span></span><br><span class="line"><span class="title class_">User</span>::<span class="title function_ invoke__">query</span>()-&gt;<span class="title function_ invoke__">whereFullText</span>(<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;测试&#x27;</span>)-&gt;<span class="title function_ invoke__">get</span>();</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-laravel9以下的版本需要自己扩展Builder和MySqlGrammer"><a href="#2-laravel9以下的版本需要自己扩展Builder和MySqlGrammer" class="headerlink" title="2.laravel9以下的版本需要自己扩展Builder和MySqlGrammer"></a>2.laravel9以下的版本需要自己扩展<code>Builder</code>和<code>MySqlGrammer</code></h5><p>找到框架<code>AppServiceProvider</code>的<code>boot()</code>方法，增加如下代码</p>
+<blockquote>
+<p>代码参考laravel9.x的官方实现，用法上也完全相同。框架升级时也可以避免重新修改业务代码。</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Database</span>\<span class="title">Query</span>\<span class="title">Builder</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Database</span>\<span class="title">Query</span>\<span class="title">Grammars</span>\<span class="title">MySqlGrammar</span>;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">boot</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 扩展 MySqlGrammar</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="title class_">MySqlGrammar</span>::<span class="title function_ invoke__">macro</span>(<span class="string">&#x27;whereFulltext&#x27;</span>, function(QueryBuilder <span class="variable">$query</span>, <span class="variable">$where</span>) &#123;</span><br><span class="line">        <span class="variable">$columns</span> = <span class="title function_ invoke__">implode</span>(<span class="string">&#x27;,&#x27;</span>, <span class="title function_ invoke__">array_map</span>(function(<span class="variable">$column</span>) <span class="keyword">use</span> (<span class="variable">$query</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">wrap</span>(<span class="variable">$column</span>);</span><br><span class="line">        &#125;, <span class="variable">$where</span>[<span class="string">&#x27;columns&#x27;</span>]));</span><br><span class="line"></span><br><span class="line">        <span class="variable">$value</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">parameter</span>(<span class="variable">$where</span>[<span class="string">&#x27;value&#x27;</span>]);</span><br><span class="line"></span><br><span class="line">        <span class="variable">$mode</span> = (<span class="variable">$where</span>[<span class="string">&#x27;options&#x27;</span>][<span class="string">&#x27;mode&#x27;</span>] ?? []) === <span class="string">&#x27;boolean&#x27;</span></span><br><span class="line">            ? <span class="string">&#x27; in boolean mode&#x27;</span></span><br><span class="line">            : <span class="string">&#x27; in natural language mode&#x27;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="variable">$expanded</span> = (<span class="variable">$where</span>[<span class="string">&#x27;options&#x27;</span>][<span class="string">&#x27;expanded&#x27;</span>] ?? []) &amp;&amp; (<span class="variable">$where</span>[<span class="string">&#x27;options&#x27;</span>][<span class="string">&#x27;mode&#x27;</span>] ?? []) !== <span class="string">&#x27;boolean&#x27;</span></span><br><span class="line">            ? <span class="string">&#x27; with query expansion&#x27;</span></span><br><span class="line">            : <span class="string">&#x27;&#x27;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;match (<span class="subst">&#123;$columns&#125;</span>) against (&quot;</span>.<span class="variable">$value</span>.<span class="string">&quot;<span class="subst">&#123;$mode&#125;</span><span class="subst">&#123;$expanded&#125;</span>)&quot;</span>;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 扩展 Builder</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="title class_">Builder</span>::<span class="title function_ invoke__">macro</span>(<span class="string">&#x27;whereFullText&#x27;</span>, function(<span class="variable">$columns</span>, <span class="variable">$value</span>, <span class="keyword">array</span> <span class="variable">$options</span> = [], <span class="variable">$boolean</span> = <span class="string">&#x27;and&#x27;</span>) &#123;</span><br><span class="line">        <span class="variable">$type</span> = <span class="string">&#x27;Fulltext&#x27;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="variable">$columns</span> = (<span class="keyword">array</span>) <span class="variable">$columns</span>;</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;wheres[] = <span class="title function_ invoke__">compact</span>(<span class="string">&#x27;type&#x27;</span>, <span class="string">&#x27;columns&#x27;</span>, <span class="string">&#x27;value&#x27;</span>, <span class="string">&#x27;options&#x27;</span>, <span class="string">&#x27;boolean&#x27;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">addBinding</span>(<span class="variable">$value</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://learnku.com/docs/laravel/9.x/queries/12246#648b12">https://learnku.com/docs/laravel/9.x/queries/12246#648b12</a></li>
+<li><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/5.7/en/innodb-fulltext-index.html">https://dev.mysql.com/doc/refman/5.7/en/innodb-fulltext-index.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/5.7/en/fulltext-search.html">https://dev.mysql.com/doc/refman/5.7/en/fulltext-search.html</a></li>
+</ul>
+
+            </div>
+            <div class="top-div">
+              <ol class="top-box"><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#%E6%89%A7%E8%A1%8C%E6%90%9C%E7%B4%A2"><span class="top-box-text">执行搜索</span></a></li><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#%E5%9C%A8laravel%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="top-box-text">在laravel中使用</span></a></li><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="top-box-text">参考文档</span></a></li></ol>
+            </div>
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="/2022/08/22/work-wechat-robot/">
+              <h3 class="post-title">
+                下一篇：使用企业微信群机器人发送消息及输出日志
+              </h3>
+            </a>
+          </div>
+        
+      </div>
+
+    
+
+
+      <footer>
+<div class="site-footer">
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/huozi1024" target="_blank">
+          <i class="icon icon-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> <a href="https://github.com/f-dong/hexo-theme-minimalism" target="_blank">Theme</a>
+  
+  
+  
+  
+  
+  
+</div>
+</footer>
+
+
+    </div>
+    
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.fancybox.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+
+
+  </body>
+</html>
