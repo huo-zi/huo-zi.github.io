@@ -2,10 +2,10 @@
 title: laravel 微信通知 laravel-notification-wechat
 date: 2021-05-31 17:42:15
 tags: 
-    - PHP
     - laravel
     - notification
     - wechat
+    - PHP
 ---
 自己造了一个laravel框架下基于[laravel-wechat](https://github.com/overtrue/laravel-wechat)使用微信消息通知作为notification通道的composer包,使用前需先熟读[laravel-消息通知](https://learnku.com/docs/laravel/8.x/notifications/9396)  
 目前已支持：

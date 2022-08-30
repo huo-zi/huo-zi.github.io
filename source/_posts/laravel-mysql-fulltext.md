@@ -6,6 +6,7 @@ tags:
     - laravel
     - fulltext
     - index
+    - PHP
 ---
 
 在laravel中使用`mysql` `fulltext`全文索引代替`like`提高性能(众所周知`like`查询以`%`开头，会导致索引失效)。

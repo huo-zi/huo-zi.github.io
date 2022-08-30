@@ -2,10 +2,10 @@
 title: 使用企业微信群机器人发送消息及输出日志
 date: 2022-08-22 14:55:56
 tags:
-    - PHP
     - robot
     - wechat
     - laravel
+    - PHP
 ---
 
 这是一个企业微信群机器人的sdk
