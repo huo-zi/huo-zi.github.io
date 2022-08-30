@@ -1,6 +1,6 @@
 ---
 title: 在laravel中使用mysql fulltext全文索引代替like查询
-date: 2022-08-23 17:23:22
+date: 2021-11-04 17:23:22
 tags:
     - mysql
     - laravel
